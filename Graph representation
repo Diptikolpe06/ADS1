@@ -1,0 +1,162 @@
+
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+struct node {
+    string data;
+    int fuel;
+    node* next;
+};
+
+class graph1 {
+public:
+    node* Head[10];
+    int v, e, ch;
+
+    void create();
+    void display();
+    void edge();
+};
+
+class GG {
+public:
+    int fuel;
+    int v, e;
+    string city[30];
+    int a[30][30];
+    void create();
+    void display();
+};
+
+void graph1::create() {
+    cout << "How many Vertices: ";
+    cin >> v;
+    cout << "Enter Names of Cities: \n";
+    for (int i = 0; i < v; i++) {
+        Head[i] = new node;
+        cin >> Head[i]->data;
+        Head[i]->next = NULL;
+    }
+}
+
+void graph1::display() {
+    node* n;
+    for (int i = 0; i < v; i++) {
+        cout << "Adjacency list for " << Head[i]->data << ": ";
+        n = Head[i]->next;
+        while (n != NULL) {
+            cout << "-> " << n->data << " (Fuel: " << n->fuel << ")";
+            n = n->next;
+        }
+        cout << endl;
+    }
+}
+
+void graph1::edge() {
+    int i, j;
+    string s, d;
+    node* n, * temp;
+    cout << "How many Edges: ";
+    cin >> e;
+
+    for (i = 0; i < e; i++) {
+        cout << "Enter Source and Dest: ";
+        cin >> s >> d;
+
+        for (j = 0; j < v; j++) {
+            if (s == Head[j]->data)
+                break;
+        }
+
+        n = new node;
+        n->data = d;
+        cout << "\nEnter Fuel Required: ";
+        cin >> n->fuel;
+        n->next = NULL;
+
+        temp = Head[j];
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+
+        temp->next = n;
+    }
+}
+
+
+    
+void GG::create() {
+    cout << "\nEnter the number of Cities: ";
+    cin >> v;
+    cout << "\nEnter the name of Cities: ";
+    for (int i = 0; i < v; i++) {
+        cin >> city[i];
+    }
+    cout << "\nEnter the Fuel: ";
+    for (int i = 0; i < v; i++) {
+        for (int j = i; j < v; j++) {
+            if (i == j) {
+                a[i][j] = 0;
+                continue;
+            }
+            else {
+                cout << "Source city: " << city[i] << " to " << city[j] << endl;
+                cout << "\nEnter the fuel: ";
+                cin >> fuel;
+                a[i][j] = fuel;
+                a[j][i] = fuel; // Assuming fuel is symmetric for simplicity
+            }
+        }
+    }
+}
+void GG::display() {
+    cout << "\nAdjacency Matrix:\n";
+    cout << "    ";
+    for (int i = 0; i < v; i++) {
+        cout <<"\t"<< city[i] ;
+    }
+    cout << endl;
+    for (int i = 0; i < v; i++) {
+        cout << city[i] << "\t";
+        for (int j = 0; j < v; j++) {
+            cout << a[i][j] << "\t";
+        }
+        cout << endl;
+    }
+}
+
+
+int main() {
+    graph1 g1;
+    GG g2;
+    int choice, ch;
+    do {
+        cout << "\n----------------------" << endl;
+        cout << "Graph Representation" << endl;
+        cout << "\n----------------------" << endl;
+        cout << "1. Adjacency List" << endl;
+        cout << "2. Adjacency Matrix" << endl;
+        cout << "3. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+        switch (choice) {
+        case 1:
+            g1.create();
+            g1.edge();
+            g1.display();
+            break;
+        case 2:
+            g2.create();
+            g2.display();
+            break;
+        case 3:
+            exit(0);
+        default:
+            cout << "\nEnter correct option\n";
+        }
+        cout << "\nDo you want to continue (1/0): ";
+        cin >> ch;
+    } while (ch == 1);
+    return 0;
+}
